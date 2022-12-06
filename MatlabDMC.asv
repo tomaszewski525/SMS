@@ -1,0 +1,37 @@
+lambda=1;
+D=90;
+N=90;
+Nu=5;
+
+ % pytanie co z tym, moze trzeba sobie zrobic ala PUSTY
+load("Odpowiedz skokowa 1000.mat")
+
+s= y/1000;
+
+M=zeros(N,Nu); 
+for i=1:N
+ for j=1:Nu
+  if (j<=i)           
+   M(i,j)=s(i-j+1);
+  end
+ end
+end
+
+I=eye(Nu);            
+K=(M'*M+lambda*I)\M';  
+Mp=zeros(N,D-1);  
+
+for i=1:N
+ for j=1:D-1
+  if i+j<=D
+   Mp(i,j)=s(i+j)-s(j);
+  else
+   Mp(i,j)=s(D)-s(j);
+  end    
+ end
+end
+
+%To do mikrokontrolera
+Ke=sum(K(1,:))       
+Ku=K(1,:)*Mp;   
+strjoin(arrayfun(@(x) num2str(x),Ku,'UniformOutput', false), 'f, ')
